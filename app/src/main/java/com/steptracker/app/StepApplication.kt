@@ -11,6 +11,7 @@ class StepApplication : Application() {
 
     companion object {
         const val NOTIFICATION_CHANNEL_ID = "step_counter_channel"
+        const val WATER_NOTIFICATION_CHANNEL_ID = "water_reminders_channel"
         lateinit var database: StepDatabase
             private set
     }
@@ -18,20 +19,31 @@ class StepApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         database = StepDatabase.getDatabase(this)
-        createNotificationChannel()
+        createNotificationChannels()
     }
 
-    private fun createNotificationChannel() {
+    private fun createNotificationChannels() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = getString(R.string.notification_channel_name)
-            val descriptionText = getString(R.string.notification_channel_description)
-            val importance = NotificationManager.IMPORTANCE_LOW
-            val channel = NotificationChannel(NOTIFICATION_CHANNEL_ID, name, importance).apply {
-                description = descriptionText
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+            // Step Counter Channel (Low importance ongoing)
+            val stepName = getString(R.string.notification_channel_name)
+            val stepDesc = getString(R.string.notification_channel_description)
+            val stepChannel = NotificationChannel(NOTIFICATION_CHANNEL_ID, stepName, NotificationManager.IMPORTANCE_LOW).apply {
+                description = stepDesc
                 setShowBadge(false)
             }
-            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
+            notificationManager.createNotificationChannel(stepChannel)
+
+            // Water Reminder Channel (Default importance with alert sound & vibration)
+            val waterName = "Water Drink Reminders"
+            val waterDesc = "Actionable hydration reminders with quick log buttons"
+            val waterChannel = NotificationChannel(WATER_NOTIFICATION_CHANNEL_ID, waterName, NotificationManager.IMPORTANCE_DEFAULT).apply {
+                description = waterDesc
+                setShowBadge(true)
+                enableVibration(true)
+            }
+            notificationManager.createNotificationChannel(waterChannel)
         }
     }
 }

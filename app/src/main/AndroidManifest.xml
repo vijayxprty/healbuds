@@ -74,6 +74,18 @@
             </intent-filter>
         </receiver>
 
+        <receiver
+            android:name=".receiver.WaterReminderReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.steptracker.app.TRIGGER_WATER_REMINDER" />
+                <action android:name="com.steptracker.app.LOG_WATER_250" />
+                <action android:name="com.steptracker.app.LOG_WATER_500" />
+                <action android:name="com.steptracker.app.SKIP_WATER" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

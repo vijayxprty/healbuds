@@ -24,8 +24,10 @@ class StepPreferences(context: Context) {
         private const val KEY_DIET_PREF = "diet_preference"
         private const val KEY_WATER_CONSUMED_ML = "water_consumed_ml"
         private const val KEY_WATER_TARGET_ML = "water_target_ml"
+        private const val KEY_WATER_REMINDER_HOURS = "water_reminder_hours"
         private const val KEY_STREAK_DAYS = "streak_days"
         private const val KEY_REST_DAYS_USED = "rest_days_used"
+        private const val KEY_DIET_PLAN_JSON = "diet_plan_json"
 
         fun getTodayDateString(): String {
             val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
@@ -50,7 +52,7 @@ class StepPreferences(context: Context) {
         set(value) = prefs.edit().putFloat(KEY_HEIGHT_CM, value).apply()
 
     var weightGoal: String
-        get() = prefs.getString(KEY_WEIGHT_GOAL, "maintain") ?: "maintain"
+        get() = prefs.getString(KEY_WEIGHT_GOAL, "lose") ?: "lose"
         set(value) = prefs.edit().putString(KEY_WEIGHT_GOAL, value).apply()
 
     var dietPreference: String
@@ -58,20 +60,28 @@ class StepPreferences(context: Context) {
         set(value) = prefs.edit().putString(KEY_DIET_PREF, value).apply()
 
     var waterConsumedMl: Int
-        get() = prefs.getInt(KEY_WATER_CONSUMED_ML, 1500)
+        get() = prefs.getInt(KEY_WATER_CONSUMED_ML, 0)
         set(value) = prefs.edit().putInt(KEY_WATER_CONSUMED_ML, value).apply()
 
     var waterTargetMl: Int
         get() = prefs.getInt(KEY_WATER_TARGET_ML, 2500)
         set(value) = prefs.edit().putInt(KEY_WATER_TARGET_ML, value).apply()
 
+    var waterReminderIntervalHours: Int
+        get() = prefs.getInt(KEY_WATER_REMINDER_HOURS, 2)
+        set(value) = prefs.edit().putInt(KEY_WATER_REMINDER_HOURS, value).apply()
+
     var streakDays: Int
-        get() = prefs.getInt(KEY_STREAK_DAYS, 12)
+        get() = prefs.getInt(KEY_STREAK_DAYS, 0)
         set(value) = prefs.edit().putInt(KEY_STREAK_DAYS, value).apply()
 
     var restDaysUsedThisWeek: Int
-        get() = prefs.getInt(KEY_REST_DAYS_USED, 1)
+        get() = prefs.getInt(KEY_REST_DAYS_USED, 0)
         set(value) = prefs.edit().putInt(KEY_REST_DAYS_USED, value).apply()
+
+    var savedDietPlanJson: String
+        get() = prefs.getString(KEY_DIET_PLAN_JSON, "") ?: ""
+        set(value) = prefs.edit().putString(KEY_DIET_PLAN_JSON, value).apply()
 
     var lastDate: String
         get() = prefs.getString(KEY_LAST_DATE, "") ?: ""
@@ -88,6 +98,35 @@ class StepPreferences(context: Context) {
     var lastSensorValue: Float
         get() = prefs.getFloat(KEY_LAST_SENSOR_VALUE, 0f)
         set(value) = prefs.edit().putFloat(KEY_LAST_SENSOR_VALUE, value).apply()
+
+    fun calculateDailyCalorieTarget(
+        weight: Float = weightKg,
+        height: Float = heightCm,
+        goal: String = weightGoal
+    ): Int {
+        // Mifflin-St Jeor formula (estimated for 28 year old)
+        val bmr = (10.0 * weight) + (6.25 * height) - (5.0 * 28) + 5.0
+        val tdee = bmr * 1.35 // Moderately active walking
+        return when (goal) {
+            "lose" -> (tdee - 400).toInt().coerceAtLeast(1200)
+            "gain" -> (tdee + 400).toInt()
+            else -> tdee.toInt()
+        }
+    }
+
+    fun calculateBmi(weight: Float = weightKg, height: Float = heightCm): Float {
+        val heightMeters = height / 100f
+        return if (heightMeters > 0) weight / (heightMeters * heightMeters) else 22f
+    }
+
+    fun getBmiCategory(bmi: Float): String {
+        return when {
+            bmi < 18.5f -> "Underweight"
+            bmi < 25.0f -> "Normal weight"
+            bmi < 30.0f -> "Overweight"
+            else -> "Obese"
+        }
+    }
 
     fun calculateDistanceKm(steps: Int): Double {
         return (steps * strideLengthMeters) / 1000.0

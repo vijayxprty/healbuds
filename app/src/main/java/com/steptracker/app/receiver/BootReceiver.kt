@@ -13,6 +13,10 @@ class BootReceiver : BroadcastReceiver() {
             intent.action == Intent.ACTION_MY_PACKAGE_REPLACED
         ) {
             StepTrackerService.startService(context)
+            val prefs = com.steptracker.app.data.StepPreferences(context)
+            if (prefs.waterReminderIntervalHours > 0) {
+                WaterReminderReceiver.scheduleReminder(context, prefs.waterReminderIntervalHours)
+            }
         }
     }
 }
