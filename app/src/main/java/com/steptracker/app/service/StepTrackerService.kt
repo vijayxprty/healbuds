@@ -61,6 +61,10 @@ class StepTrackerService : Service(), SensorEventListener {
             }
             context.stopService(intent)
         }
+
+        fun setStepsForTesting(context: Context, newCount: Int) {
+            _currentStepsFlow.value = newCount
+        }
     }
 
     override fun onCreate() {

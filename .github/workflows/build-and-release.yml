@@ -36,37 +36,41 @@ jobs:
       - name: Build APK
         run: |
           ./gradlew assembleDebug --no-daemon --stacktrace
+          cp app/build/outputs/apk/debug/app-debug.apk Healbuds-v2.1.0.apk
           cp app/build/outputs/apk/debug/app-debug.apk Healbuds-v2.0.0.apk
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Healbuds-v2.0.0.apk
-          path: Healbuds-v2.0.0.apk
+          name: Healbuds-v2.1.0.apk
+          path: Healbuds-v2.1.0.apk
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v2.0.0
-          name: "Healbuds v2.0.0 (Final Release)"
+          tag_name: v2.1.0
+          name: "Healbuds v2.1.0 (Final Complete Version)"
           body: |
-            ### 🌱 Healbuds v2.0.0 — Final Permanent Release
+            ### 🌱 Healbuds v2.1.0 — Final Complete Production Release
             
             This is the official, final production release of **Healbuds**: a 100% free, permanent, on-device Android health and lifestyle platform.
             
             #### 🌟 What's Included:
-            - **👟 Hardware Sensor Engine**: Android `TYPE_STEP_COUNTER` hardware pedometer with 10-step cadence filtering and vehicle rejection.
-            - **🍱 Authentic Indian Thali Planner**: Interactive 6-katori plate (Dal, Rajma, Rice, Roti, Curd, Salad), Veg/Non-Veg toggle, custom meal builder with emojis.
-            - **🔥 Smart Streaks & Full Calendar**: 2 allowed rest days/week without breaking streak, 30-day visual calendar grid, and 3-day inactivity rules.
+            - **🍱 Interactive Circular Indian Thali Plate**: True visual stainless-steel Thali plate in Jetpack Compose with interactive katoris (Dal, Rajma/Curry, Basmati Rice, 2x Roti, Fresh Curd, Salad & Achar). Tap any bowl to swap dishes in real-time with live calorie and macro recalculation!
+            - **🥗 Complete My Diet Planner with 5 Meal Slots**: 🌅 Breakfast, ☀️ Lunch (Thali), ☕ Evening Snacks, 🌙 Dinner, and 🌃 Late-Night Cravings with Indian meal suggestions tailored for **Lose Weight (Deficit)** or **Gain Weight (Surplus)**.
+            - **🥘 Custom Meal Builder with Clipart / Emojis**: Create custom foods (e.g. Daal Chawal, Roti & Pickle) with customizable emojis (🫓, 🍚, 🥣, 🍛, 🥬, 🧀, 🥛, 🍳, 🍗, 🍋, 🍵, ☕, 🍎, 🍿) and calories!
+            - **🎯 Step Goal in Thousands & Custom Number**: Pick goals in thousands (5,000, 6,000, 7,000, 8,000, 9,000, 10,000, 11,000, 12,000, 13,000, 14,000, 15,000) or enter ANY custom number honestly with quick -500/+500 steppers.
+            - **🔥 Smart Streaks & Complete 30-Day Calendar**: 2 allowed rest days/week without breaking streak, complete 30-day November 2026 calendar grid, and 3-day inactivity rules.
+            - **🌙 Bedtime & Sleep Recovery Suggestions**: Calming suggestions with sleeping mascot illustration to optimize deep sleep and walking recovery.
             - **💧 Hydration Tracker & Alarms**: Quick 1-tap logging (+250ml / +500ml), daily target progress ring, and customizable reminder alerts.
-            - **🌙 Sleep & Recovery Coaching**: 10:30 PM suggested wind-down and quiet hours.
-            - **✨ VMS Buddy Mascot**: 9 custom expressions across walking, victory celebrations, workouts, rest days, and alerts.
+            - **👟 Hardware Sensor Engine**: Android `TYPE_STEP_COUNTER` hardware pedometer with 10-step cadence filtering and vehicle rejection.
+            - **✨ VMS Buddy Mascot**: Authentic expressions across walking, victory celebrations, workouts, rest days, sleep, and celebrations.
             - **♥ Support Developer Pack**: Direct native UPI payment chooser (`Vijay Kumar`, `jaynishad2010@okhdfcbank`) with voluntary custom amount, copy toast, and Instagram footer.
-            - **🎨 Official App Icon**: Custom mascot on pure white background packaged into all Android mipmap densities.
             
             #### 📥 Download & Install
-            Download **`Healbuds-v2.0.0.apk`** below to install directly on your Android phone!
+            Download **`Healbuds-v2.1.0.apk`** below to install directly on your Android phone!
           files: |
+            Healbuds-v2.1.0.apk
             Healbuds-v2.0.0.apk
             app/build/outputs/apk/debug/app-debug.apk
         env:

@@ -82,7 +82,13 @@ class MainActivity : ComponentActivity() {
                         val updated = waterConsumed + addedMl
                         prefs.waterConsumedMl = updated
                         waterConsumed = updated
-                        Toast.makeText(this@MainActivity, "+250ml water added! Stay hydrated!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@MainActivity, "+${addedMl}ml water added! Stay hydrated!", Toast.LENGTH_SHORT).show()
+                    },
+                    onAddTestSteps = { extra ->
+                        val updated = currentSteps + extra
+                        prefs.todaySteps = updated
+                        StepTrackerService.setStepsForTesting(this@MainActivity, updated)
+                        Toast.makeText(this@MainActivity, "+$extra steps added!", Toast.LENGTH_SHORT).show()
                     },
                     onDonateClick = {
                         launchUpiPaymentChooser {
