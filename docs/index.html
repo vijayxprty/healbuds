@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StepPulse — Free & Battery-Friendly Android Step Tracker</title>
+  <meta name="description" content="A 100% free, open-source, private Android step counter app using hardware pedometer sensors. Zero ads, zero tracking, zero battery drain.">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+            },
+            dark: {
+              900: '#0b1120',
+              800: '#0f172a',
+              700: '#1e293b',
+              600: '#334155'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glow-emerald { box-shadow: 0 0 50px -10px rgba(16, 185, 129, 0.3); }
+    .glow-blue { box-shadow: 0 0 60px -15px rgba(59, 130, 246, 0.25); }
+  </style>
+</head>
+<body class="bg-dark-900 text-slate-100 min-h-screen selection:bg-brand-500 selection:text-dark-900">
+
+  <!-- Navigation -->
+  <header class="border-b border-dark-700/60 sticky top-0 z-50 backdrop-blur-md bg-dark-900/80">
+    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 to-emerald-400 flex items-center justify-center shadow-lg shadow-brand-500/20">
+          <svg class="w-5 h-5 text-dark-900" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+        </div>
+        <span class="text-xl font-bold tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">StepPulse</span>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <a href="#how-to-install" class="hidden sm:inline-block text-sm font-medium text-slate-400 hover:text-white transition">Installation Guide</a>
+        <a href="https://github.com/vijayxprty/step-tracker" target="_blank" class="text-sm font-medium text-slate-400 hover:text-white transition flex items-center gap-1.5">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          <span class="hidden md:inline">GitHub</span>
+        </a>
+        <a href="https://github.com/vijayxprty/step-tracker/releases/latest/download/app-debug.apk" class="px-4 py-2 rounded-lg bg-brand-500 hover:bg-brand-600 text-dark-900 font-semibold text-sm transition shadow-md shadow-brand-500/20 flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          Download APK
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="relative pt-20 pb-28 overflow-hidden">
+    <!-- Glow Background Accents -->
+    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-brand-500/10 blur-[130px] rounded-full pointer-events-none"></div>
+    <div class="absolute top-1/3 left-1/3 w-[400px] h-[300px] bg-blue-500/10 blur-[140px] rounded-full pointer-events-none"></div>
+
+    <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      <!-- Left Copy -->
+      <div class="lg:col-span-7 text-center lg:text-left space-y-6">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-dark-700/80 border border-dark-600 text-xs font-semibold text-brand-500">
+          <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
+          100% Free &bull; Open Source &bull; Zero Battery Drain
+        </div>
+
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight text-white">
+          Walk more. Track easily.<br/>
+          <span class="bg-gradient-to-r from-brand-500 via-emerald-300 to-blue-400 bg-clip-text text-transparent">Zero battery cost.</span>
+        </h1>
+
+        <p class="text-lg text-slate-400 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+          StepPulse uses your phone’s built-in hardware pedometer sensor. It works completely offline, never connects to cloud servers, resets automatically at midnight, and uses practically 0% battery.
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+          <a href="https://github.com/vijayxprty/step-tracker/releases/latest/download/app-debug.apk" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-600 hover:to-brand-700 text-dark-900 font-bold text-base transition shadow-xl shadow-brand-500/25 flex items-center justify-center gap-3 group">
+            <svg class="w-5 h-5 transition-transform group-hover:translate-y-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            Download Android APK (Free)
+          </a>
+          <a href="#how-to-install" class="w-full sm:w-auto px-6 py-4 rounded-xl bg-dark-700/80 hover:bg-dark-600 border border-dark-600 text-slate-200 font-semibold text-sm transition flex items-center justify-center gap-2">
+            Installation Steps
+          </a>
+        </div>
+
+        <!-- Trust Badges -->
+        <div class="pt-6 grid grid-cols-3 gap-4 border-t border-dark-700/70 max-w-md mx-auto lg:mx-0">
+          <div>
+            <div class="text-2xl font-bold text-white">₹0</div>
+            <div class="text-xs text-slate-400">Completely Free</div>
+          </div>
+          <div>
+            <div class="text-2xl font-bold text-white">0%</div>
+            <div class="text-xs text-slate-400">GPS Battery Drain</div>
+          </div>
+          <div>
+            <div class="text-2xl font-bold text-white">100%</div>
+            <div class="text-xs text-slate-400">Offline & Private</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Mockup: Interactive App Screen -->
+      <div class="lg:col-span-5 flex justify-center">
+        <div class="relative w-[320px] rounded-[42px] p-3 bg-gradient-to-b from-slate-700 via-dark-800 to-dark-900 shadow-2xl glow-emerald border border-slate-700">
+          <!-- Phone Speaker & Notch -->
+          <div class="absolute top-6 left-1/2 -translate-x-1/2 w-24 h-4 bg-dark-900 rounded-full z-20"></div>
+
+          <!-- Inside Screen -->
+          <div class="w-full rounded-[34px] bg-dark-800 p-5 pt-8 text-center border border-dark-700 flex flex-col justify-between overflow-hidden">
+            <!-- App Header -->
+            <div class="flex items-center justify-between pb-4">
+              <div class="text-left">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-brand-500"></span>
+                  <span class="text-xs font-bold text-white tracking-wide">StepPulse</span>
+                </div>
+                <div class="text-[11px] text-slate-400">Today, Active</div>
+              </div>
+              <div class="w-7 h-7 rounded-full bg-dark-700 flex items-center justify-center text-brand-500 text-xs">
+                ⚙️
+              </div>
+            </div>
+
+            <!-- Circular Progress Mock -->
+            <div class="relative w-48 h-48 mx-auto my-3 flex items-center justify-center">
+              <svg class="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="40" fill="transparent" stroke="#1e293b" stroke-width="8"></circle>
+                <circle cx="50" cy="50" r="40" fill="transparent" stroke="#10b981" stroke-width="8" stroke-dasharray="251.2" stroke-dashoffset="65" stroke-linecap="round"></circle>
+              </svg>
+              <div class="absolute flex flex-col items-center">
+                <span class="text-2xl">👟</span>
+                <span class="text-3xl font-extrabold text-white tracking-tight">7,420</span>
+                <span class="text-[11px] text-slate-400">Goal: 10,000</span>
+                <span class="mt-1 px-2 py-0.5 rounded-full bg-brand-500/20 text-brand-500 font-semibold text-[10px]">74% Done</span>
+              </div>
+            </div>
+
+            <!-- Mini Metrics Row -->
+            <div class="grid grid-cols-3 gap-2 my-2">
+              <div class="bg-dark-700/60 rounded-xl p-2.5 text-left border border-dark-600/40">
+                <div class="text-[10px] text-blue-400 font-semibold">📍 Distance</div>
+                <div class="text-sm font-bold text-white mt-0.5">5.65 <span class="text-[9px] text-slate-400">km</span></div>
+              </div>
+              <div class="bg-dark-700/60 rounded-xl p-2.5 text-left border border-dark-600/40">
+                <div class="text-[10px] text-amber-400 font-semibold">🔥 Burned</div>
+                <div class="text-sm font-bold text-white mt-0.5">297 <span class="text-[9px] text-slate-400">kcal</span></div>
+              </div>
+              <div class="bg-dark-700/60 rounded-xl p-2.5 text-left border border-dark-600/40">
+                <div class="text-[10px] text-purple-400 font-semibold">⏱️ Active</div>
+                <div class="text-sm font-bold text-white mt-0.5">74 <span class="text-[9px] text-slate-400">min</span></div>
+              </div>
+            </div>
+
+            <!-- Weekly Activity Bars -->
+            <div class="bg-dark-700/40 rounded-xl p-3 text-left border border-dark-600/30 mt-1">
+              <div class="flex justify-between items-center text-[11px] text-slate-300 font-medium mb-2">
+                <span>Weekly Activity</span>
+                <span class="text-brand-500 text-[10px]">Active</span>
+              </div>
+              <div class="flex justify-between items-end h-10 px-1">
+                <div class="w-3 bg-brand-500/40 rounded-t h-6"></div>
+                <div class="w-3 bg-brand-500 rounded-t h-8"></div>
+                <div class="w-3 bg-brand-500/40 rounded-t h-5"></div>
+                <div class="w-3 bg-brand-500 rounded-t h-10"></div>
+                <div class="w-3 bg-brand-500/40 rounded-t h-7"></div>
+                <div class="w-3 bg-brand-500 rounded-t h-9"></div>
+                <div class="w-3 bg-brand-500 rounded-t h-8 ring-1 ring-brand-500"></div>
+              </div>
+            </div>
+
+            <div class="mt-3 pt-2 text-[10px] text-slate-500 flex items-center justify-center gap-1">
+              <span>🔒 100% On-Device Sensor</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Key Features -->
+  <section class="py-20 border-t border-dark-700/80 bg-dark-800/40">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
+        <h2 class="text-3xl font-bold tracking-tight text-white">Engineered for simplicity & battery life</h2>
+        <p class="text-slate-400">Most fitness apps drain your battery with GPS and bloated ads. StepPulse takes the clean approach.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Feature 1 -->
+        <div class="p-6 rounded-2xl bg-dark-700/50 border border-dark-600 hover:border-brand-500/50 transition">
+          <div class="w-12 h-12 rounded-xl bg-brand-500/10 text-brand-500 flex items-center justify-center text-2xl mb-4">
+            🔋
+          </div>
+          <h3 class="text-lg font-bold text-white mb-2">Hardware Sensor Pedometer</h3>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            Directly hooks into Android’s hardware step-counting coprocessor. Works quietly in the background without waking the main CPU or using GPS.
+          </p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="p-6 rounded-2xl bg-dark-700/50 border border-dark-600 hover:border-blue-500/50 transition">
+          <div class="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-2xl mb-4">
+            🛡️
+          </div>
+          <h3 class="text-lg font-bold text-white mb-2">100% Private & Offline</h3>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            No signup. No logins. No servers. Your step history is stored locally in an encrypted Room SQLite database on your device and never uploaded anywhere.
+          </p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="p-6 rounded-2xl bg-dark-700/50 border border-dark-600 hover:border-amber-500/50 transition">
+          <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-2xl mb-4">
+            ⏰
+          </div>
+          <h3 class="text-lg font-bold text-white mb-2">Automatic Midnight Reset</h3>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            Steps automatically archive at 12:00 AM every night into your daily records. The ongoing notification keeps you updated with a glance.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Installation Steps -->
+  <section id="how-to-install" class="py-20 border-t border-dark-700/80">
+    <div class="max-w-4xl mx-auto px-6">
+      <div class="text-center mb-14 space-y-3">
+        <h2 class="text-3xl font-bold tracking-tight text-white">How to install the APK on Android</h2>
+        <p class="text-slate-400">Because StepPulse is free and open-source, you install the APK directly on your phone in 4 simple steps.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="flex items-start gap-4 p-5 rounded-xl bg-dark-700/40 border border-dark-600">
+          <div class="w-8 h-8 rounded-lg bg-brand-500/20 text-brand-500 font-bold flex items-center justify-center shrink-0">1</div>
+          <div>
+            <h4 class="font-bold text-white mb-1">Download the APK</h4>
+            <p class="text-xs text-slate-400">Click the "Download APK" button on this page using your Android phone’s browser (Chrome, Firefox, etc.).</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-4 p-5 rounded-xl bg-dark-700/40 border border-dark-600">
+          <div class="w-8 h-8 rounded-lg bg-brand-500/20 text-brand-500 font-bold flex items-center justify-center shrink-0">2</div>
+          <div>
+            <h4 class="font-bold text-white mb-1">Confirm Download</h4>
+            <p class="text-xs text-slate-400">If your browser shows "File might be harmful", tap <strong>Download anyway</strong> (standard Android warning for direct APKs).</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-4 p-5 rounded-xl bg-dark-700/40 border border-dark-600">
+          <div class="w-8 h-8 rounded-lg bg-brand-500/20 text-brand-500 font-bold flex items-center justify-center shrink-0">3</div>
+          <div>
+            <h4 class="font-bold text-white mb-1">Allow Unknown Sources</h4>
+            <p class="text-xs text-slate-400">Tap the downloaded notification. If prompted, toggle on <em>"Allow from this source"</em> for your browser.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-4 p-5 rounded-xl bg-dark-700/40 border border-dark-600">
+          <div class="w-8 h-8 rounded-lg bg-brand-500/20 text-brand-500 font-bold flex items-center justify-center shrink-0">4</div>
+          <div>
+            <h4 class="font-bold text-white mb-1">Tap Install & Grant Sensor</h4>
+            <p class="text-xs text-slate-400">Tap <strong>Install</strong>. Once opened, tap <strong>Allow</strong> for Physical Activity permission, and you're all set!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Download Banner -->
+      <div class="mt-12 p-8 rounded-3xl bg-gradient-to-r from-brand-600 to-emerald-600 text-dark-900 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-2xl">
+        <div>
+          <h3 class="text-2xl font-extrabold text-dark-900">Ready to start walking?</h3>
+          <p class="text-dark-900/80 text-sm mt-1">Get the latest release APK directly from GitHub.</p>
+        </div>
+        <a href="https://github.com/vijayxprty/step-tracker/releases/latest/download/app-debug.apk" class="px-8 py-4 rounded-xl bg-dark-900 hover:bg-dark-800 text-white font-bold text-sm transition shadow-lg shrink-0 flex items-center gap-2">
+          <span>Download StepPulse APK</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-dark-700/60 py-10 bg-dark-900 text-center text-xs text-slate-500">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p>&copy; 2026 StepPulse. Built with Jetpack Compose & Kotlin. 100% Free.</p>
+      <div class="flex items-center gap-6">
+        <a href="https://github.com/vijayxprty/step-tracker" class="hover:text-white transition">GitHub Repository</a>
+        <a href="https://github.com/vijayxprty/step-tracker/releases" class="hover:text-white transition">All Releases</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
