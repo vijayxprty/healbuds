@@ -11,6 +11,7 @@ val BlueLight = Color(0xFF60A5FA)
 
 val AmberFire = Color(0xFFF59E0B)
 val PurpleMetric = Color(0xFF8B5CF6)
+val RoyalPurple = Color(0xFF8B5CF6)
 
 val BackgroundDark = Color(0xFF0F172A)
 val SurfaceDark = Color(0xFF1E293B)
