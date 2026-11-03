@@ -872,7 +872,7 @@ fun StreaksCalendarTab(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    listOf("M", "T", "W", "T", "F", "S", "S").forEach { day ->
+                    for (day in listOf("M", "T", "W", "T", "F", "S", "S")) {
                         Text(
                             text = day,
                             color = TextSecondary,
@@ -898,14 +898,14 @@ fun StreaksCalendarTab(
                     listOf(Pair(30, false), Pair(1, false), Pair(2, false), Pair(3, false), Pair(4, false), Pair(5, false), Pair(6, false))
                 )
 
-                weeks.forEach { week ->
+                for (week in weeks) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 3.dp),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        week.forEach { (dayNum, isCompleted) ->
+                        for ((dayNum, isCompleted) in week) {
                             val isToday = (dayNum == 4)
                             val isRestDay = (dayNum == 3)
                             Box(
@@ -1626,7 +1626,7 @@ fun DietMealCard(meal: DietMeal) {
                 onClick = { logged = !logged }
             ) {
                 Icon(
-                    imageVector = if (logged) Icons.Default.CheckCircle else Icons.Default.AddCircleOutline,
+                    imageVector = if (logged) Icons.Default.Check else Icons.Default.Add,
                     contentDescription = "Log meal",
                     tint = if (logged) EmeraldGreen else TextSecondary
                 )
@@ -2492,12 +2492,12 @@ fun GoalDialog(
 
                 // Grid / Wrap of thousands (5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000)
                 val rows = thousandGoals.chunked(3)
-                rows.forEach { rowGoals ->
+                for (rowGoals in rows) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
-                        rowGoals.forEach { g ->
+                        for (g in rowGoals) {
                             val isSelected = selectedGoal == g
                             Surface(
                                 color = if (isSelected) EmeraldGreen else SurfaceLightDark,
@@ -2517,6 +2517,11 @@ fun GoalDialog(
                                     textAlign = TextAlign.Center,
                                     modifier = Modifier.padding(vertical = 10.dp)
                                 )
+                            }
+                        }
+                        if (rowGoals.size < 3) {
+                            repeat(3 - rowGoals.size) {
+                                Spacer(modifier = Modifier.weight(1f))
                             }
                         }
                     }
