@@ -45,21 +45,24 @@ jobs:
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.0.0
-          name: "StepPulse v1.0.0 (Release)"
+          tag_name: v2.0.0
+          name: "Healbuds v2.0.0 (Release)"
           body: |
-            ### 👟 StepPulse v1.0.0 Initial Release
-            
-            This is the initial release of **StepPulse**, a 100% free, privacy-first Android step tracker.
-            
-            #### 🌟 Highlights
-            - **Hardware Sensor Integration**: Real-time step counting with zero battery consumption.
-            - **100% Offline & Private**: Stored locally in encrypted SQLite/Room database.
-            - **Daily Stats & History**: Tracks distance (km), estimated calories burned (kcal), active walking time, and 7-day progress.
-            - **Ongoing Notification**: Displays live progress and goal percentage without opening the app.
-            
-            #### 📥 Download
-            Download the `app-debug.apk` asset below and install it directly on your Android phone!
+            ### 🌱 Healbuds v2.0.0 Release — Smart Steps, Indian Diet & Recovery Platform
+
+            Welcome to the major v2.0 release of **Healbuds** (formerly StepPulse), the 100% free, playful, privacy-first Android health companion.
+
+            #### 🌟 Highlights & New Features
+            - **👟 Hardware Pedometer & Cadence Filter**: Accurate on-device step counting via `TYPE_STEP_COUNTER` with a 10-step buffer to filter false positives and vehicle vibrations. Zero battery drain.
+            - **🍱 Authentic Indian Thali Diet Planner**: Interactive plate featuring Rajma, Curd, Rice, Dal, and Roti. Pure Veg and Non-Veg modes with macro breakdowns and custom dish builder.
+            - **🔥 Smart Streaks & Rest Days**: Keep your streak alive! 2 rest days allowed per week (Mon to Sun) without breaking your streak. 3-day inactivity threshold before resetting.
+            - **💧 Hydration Tracker & Alarms**: Quick 1-tap +250ml logging, daily water target progress, and customizable drink reminders.
+            - **🌙 Sleep & Recovery Wind-Down**: Bedtime coaching with quiet hours.
+            - **✨ Adorable Mascot Integration**: 9 expressive illustrations celebrating walking, workouts, rest days, milestones, and care.
+            - **♥ Support the Developer Pack**: Clean UPI donation integration with QR code and deep-linking (`jaynishad2010@okhdfcbank`).
+
+            #### 📥 Download & Install
+            Download the `app-debug.apk` asset below and install directly on your Android phone!
           files: app/build/outputs/apk/debug/app-debug.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

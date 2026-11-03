@@ -21,6 +21,20 @@
         android:name="android.hardware.sensor.stepdetector"
         android:required="false" />
 
+    <!-- Package Visibility Queries for UPI Apps and Instagram Credit Link -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="upi" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data
+                android:scheme="https"
+                android:host="instagram.com" />
+        </intent>
+    </queries>
+
     <application
         android:name=".StepApplication"
         android:allowBackup="true"

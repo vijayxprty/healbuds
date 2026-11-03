@@ -21,3 +21,7 @@ val TextSecondary = Color(0xFF94A3B8)
 val TextMuted = Color(0xFF64748B)
 
 val TrackBackground = Color(0xFF1E293B)
+
+val RosePink = Color(0xFFEC4899)
+val HeartRed = Color(0xFFEF4444)
+val CyanWater = Color(0xFF06B6D4)

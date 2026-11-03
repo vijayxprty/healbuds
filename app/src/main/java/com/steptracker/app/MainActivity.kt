@@ -1,15 +1,20 @@
 package com.steptracker.app
 
 import android.Manifest
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.*
 import androidx.core.content.ContextCompat
-import com.steptracker.app.data.DailyStepRecord
 import com.steptracker.app.data.StepPreferences
 import com.steptracker.app.service.StepTrackerService
 import com.steptracker.app.ui.StepTrackerScreen
@@ -42,7 +47,13 @@ class MainActivity : ComponentActivity() {
         setContent {
             StepTrackerTheme {
                 val currentSteps by StepTrackerService.currentStepsFlow.collectAsState()
-                var dailyGoal by remember { mutableStateOf(prefs.dailyGoal) }
+                var dailyGoal by remember { mutableIntStateOf(prefs.dailyGoal) }
+                var waterConsumed by remember { mutableIntStateOf(prefs.waterConsumedMl) }
+                val waterTarget = prefs.waterTargetMl
+                val streakDays = prefs.streakDays
+                val restDaysUsed = prefs.restDaysUsedThisWeek
+
+                var showFallbackSheet by remember { mutableStateOf(false) }
 
                 val recentHistory by StepApplication.database.stepDao()
                     .getRecentRecords(7)
@@ -59,12 +70,62 @@ class MainActivity : ComponentActivity() {
                     calories = calories,
                     activeMinutes = activeMins,
                     recentHistory = recentHistory,
+                    waterConsumedMl = waterConsumed,
+                    waterTargetMl = waterTarget,
+                    streakDays = streakDays,
+                    restDaysUsed = restDaysUsed,
                     onUpdateGoal = { newGoal ->
                         prefs.dailyGoal = newGoal
                         dailyGoal = newGoal
-                    }
+                    },
+                    onLogWater = { addedMl ->
+                        val updated = waterConsumed + addedMl
+                        prefs.waterConsumedMl = updated
+                        waterConsumed = updated
+                        Toast.makeText(this@MainActivity, "+250ml water added! Stay hydrated!", Toast.LENGTH_SHORT).show()
+                    },
+                    onDonateClick = {
+                        launchUpiPaymentChooser {
+                            showFallbackSheet = true
+                        }
+                    },
+                    onCopyUpiClick = {
+                        copyUpiToClipboard()
+                    },
+                    onInstagramClick = {
+                        openInstagramProfile()
+                    },
+                    showFallbackSheet = showFallbackSheet,
+                    onDismissFallbackSheet = { showFallbackSheet = false }
                 )
             }
+        }
+    }
+
+    private fun launchUpiPaymentChooser(onFallback: () -> Unit) {
+        try {
+            val upiUri = Uri.parse("upi://pay?pa=jaynishad2010@okhdfcbank&pn=Vijay%20Kumar&aid=uGICAgIDQqveaLw")
+            val intent = Intent(Intent.ACTION_VIEW, upiUri)
+            val chooser = Intent.createChooser(intent, "Choose an app to pay with")
+            startActivity(chooser)
+        } catch (e: Exception) {
+            onFallback()
+        }
+    }
+
+    private fun copyUpiToClipboard() {
+        val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("UPI ID", "jaynishad2010@okhdfcbank")
+        clipboard.setPrimaryClip(clip)
+        Toast.makeText(this, "UPI ID copied.", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun openInstagramProfile() {
+        try {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/momentswithvms/"))
+            startActivity(intent)
+        } catch (e: Exception) {
+            Toast.makeText(this, "Unable to open Instagram", Toast.LENGTH_SHORT).show()
         }
     }
 
