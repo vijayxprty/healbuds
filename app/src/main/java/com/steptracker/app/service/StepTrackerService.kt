@@ -225,23 +225,26 @@ class StepTrackerService : Service(), SensorEventListener {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        val progress = if (goal > 0) ((steps.toFloat() / goal) * 100).toInt() else 0
-        val distKm = prefs.calculateDistanceKm(steps)
-        val calories = prefs.calculateCalories(steps).toInt()
-
-        val contentText = String.format(
-            Locale.getDefault(),
-            "%,d / %,d steps (%d%%) • %.2f km • %d kcal",
-            steps,
-            goal,
-            progress,
-            distKm,
-            calories
-        )
+        val remaining = (goal - steps).coerceAtLeast(0)
+        val motivationalText = if (steps >= goal) {
+            String.format(
+                Locale.getDefault(),
+                "🎉 Goal Crushed! %,d steps completed today! VMS Buddy is dancing with joy!",
+                steps
+            )
+        } else {
+            String.format(
+                Locale.getDefault(),
+                "\"%,d steps crushed! Only %,d more to hit our daily goal. Let's walk together!\"",
+                steps,
+                remaining
+            )
+        }
 
         return NotificationCompat.Builder(this, StepApplication.NOTIFICATION_CHANNEL_ID)
-            .setContentTitle(getString(R.string.notification_title))
-            .setContentText(contentText)
+            .setContentTitle("Healbuds · VMS Buddy 👟")
+            .setContentText(motivationalText)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(motivationalText))
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentIntent(pendingIntent)
             .setProgress(goal, steps, false)

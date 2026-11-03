@@ -8,6 +8,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -93,13 +95,13 @@ fun StepTrackerScreen(
                     onDonateClick = onDonateClick,
                     onInstagramClick = onInstagramClick
                 )
-                1 -> StreaksTab(
+                1 -> StreaksCalendarTab(
                     streakDays = streakDays,
                     restDaysUsed = restDaysUsed,
                     onDonateClick = onDonateClick,
                     onInstagramClick = onInstagramClick
                 )
-                2 -> IndianDietTab(
+                2 -> IndianThaliDietTab(
                     onDonateClick = onDonateClick,
                     onInstagramClick = onInstagramClick
                 )
@@ -141,7 +143,7 @@ fun StepTrackerScreen(
 }
 
 /* =====================================================================
-   HEADER & BOTTOM NAV
+   HEADER & BOTTOM NAVIGATION
    ===================================================================== */
 
 @Composable
@@ -180,9 +182,9 @@ fun HealbudsHeader(
                 )
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
-                    text = "Private",
+                    text = "On your device",
                     color = EmeraldGreen,
-                    fontSize = 11.sp,
+                    fontSize = 10.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
                         .background(EmeraldGreen.copy(alpha = 0.15f), RoundedCornerShape(6.dp))
@@ -197,7 +199,7 @@ fun HealbudsHeader(
         }
 
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            // Heart donate button - Universal across all screens (Brief Section 2a)
+            // Heart donate button - Universal across every screen (Brief Section 2a)
             IconButton(
                 onClick = onHeartClick,
                 modifier = Modifier
@@ -271,9 +273,6 @@ fun HealbudsBottomNav(
    UNIVERSAL COMPONENTS (DONATE ROW & FOOTER CREDIT)
    ===================================================================== */
 
-/**
- * Universal Donate Row appearing at the bottom of screens 0, 1, 2, 3 (Brief Section 2b)
- */
 @Composable
 fun UniversalDonateRow(onClick: () -> Unit) {
     Surface(
@@ -324,9 +323,6 @@ fun UniversalDonateRow(onClick: () -> Unit) {
     }
 }
 
-/**
- * Universal Footer Credit appearing at the bottom of every screen (Brief Section 2d)
- */
 @Composable
 fun UniversalFooterCredit(onInstagramClick: () -> Unit) {
     Column(
@@ -367,7 +363,7 @@ fun UniversalFooterCredit(onInstagramClick: () -> Unit) {
 }
 
 /* =====================================================================
-   TAB 0: STEPS & ACTIVITY
+   TAB 0: STEPS & ACTIVITY (FIXED PERFECT CIRCLE SPACING)
    ===================================================================== */
 
 @Composable
@@ -398,14 +394,16 @@ fun TodayStepsTab(
             .padding(horizontal = 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-        // Circular Step Progress Ring
+        // Large Circular Step Progress Ring (250dp diameter with generous internal padding)
         Box(
             contentAlignment = Alignment.Center,
-            modifier = Modifier.size(230.dp)
+            modifier = Modifier
+                .size(255.dp)
+                .padding(4.dp)
         ) {
-            Canvas(modifier = Modifier.size(200.dp)) {
+            Canvas(modifier = Modifier.size(240.dp)) {
                 drawCircle(
                     color = TrackBackground,
                     style = Stroke(width = 16.dp.toPx(), cap = StrokeCap.Round)
@@ -419,37 +417,48 @@ fun TodayStepsTab(
                 )
             }
 
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            // Interior elements spaced generously to avoid collision
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.padding(horizontal = 24.dp)
+            ) {
+                Text(text = "👟", fontSize = 22.sp)
+                Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = String.format(Locale.getDefault(), "%,d", currentSteps),
                     color = TextPrimary,
-                    fontSize = 42.sp,
-                    fontWeight = FontWeight.ExtraBold
+                    fontSize = 38.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    lineHeight = 40.sp
                 )
+                Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "/ %,d steps".format(dailyGoal),
+                    text = "Daily Goal: %,d steps".format(dailyGoal),
                     color = TextSecondary,
-                    fontSize = 13.sp,
+                    fontSize = 12.sp,
                     fontWeight = FontWeight.Medium
                 )
-                Spacer(modifier = Modifier.height(6.dp))
+                Spacer(modifier = Modifier.height(10.dp))
+                // Pill with 24px+ clearance from the circular stroke
                 val percentage = (progress * 100).toInt()
                 Surface(
                     color = EmeraldGreen.copy(alpha = 0.15f),
-                    shape = RoundedCornerShape(12.dp)
+                    shape = RoundedCornerShape(14.dp),
+                    border = androidx.compose.foundation.BorderStroke(1.dp, EmeraldGreen.copy(alpha = 0.3f))
                 ) {
                     Text(
-                        text = "% Goal",
+                        text = "% Completed",
                         color = EmeraldGreen,
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
+                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
                     )
                 }
             }
         }
 
-        Spacer(modifier = Modifier.height(14.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         // Hardware Cadence Active Badge
         Surface(
@@ -476,7 +485,7 @@ fun TodayStepsTab(
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = "Ignores vehicle bumps & pocket twitches · Hardware sensor",
+                        text = "Vehicle vibration rejection · On-device pedometer coprocessor",
                         color = TextSecondary,
                         fontSize = 10.sp
                     )
@@ -484,7 +493,7 @@ fun TodayStepsTab(
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(14.dp))
 
         // Mascot Motivation Card
         Surface(
@@ -509,7 +518,7 @@ fun TodayStepsTab(
                 Spacer(modifier = Modifier.width(12.dp))
                 Column {
                     Text(
-                        text = if (progress >= 1f) "Goal Achieved! You rock! 🎉" else "Keep going, buddy!",
+                        text = if (progress >= 1f) "Goal Crushed! 🎉" else "VMS Buddy 👟",
                         color = TextPrimary,
                         fontWeight = FontWeight.Bold,
                         fontSize = 14.sp
@@ -518,7 +527,10 @@ fun TodayStepsTab(
                         text = if (progress >= 1f)
                             "You crushed your daily goal! Time to celebrate!"
                         else
-                            "Just %d steps left to hit your goal today!".format((dailyGoal - currentSteps).coerceAtLeast(0)),
+                            ""%,d steps crushed! Only %,d more to hit our daily goal. Let's walk together!"".format(
+                                currentSteps,
+                                (dailyGoal - currentSteps).coerceAtLeast(0)
+                            ),
                         color = TextSecondary,
                         fontSize = 11.sp,
                         lineHeight = 15.sp
@@ -527,7 +539,7 @@ fun TodayStepsTab(
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(14.dp))
 
         // 3 Key Health Metrics
         Row(
@@ -560,7 +572,7 @@ fun TodayStepsTab(
             )
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         // Universal Donate Row (Brief 2b)
         UniversalDonateRow(onClick = onDonateClick)
@@ -573,11 +585,11 @@ fun TodayStepsTab(
 }
 
 /* =====================================================================
-   TAB 1: STREAKS & SMART CALENDAR (2 REST DAYS/WEEK)
+   TAB 1: STREAKS & COMPLETE MONTHLY CALENDAR (User Requested)
    ===================================================================== */
 
 @Composable
-fun StreaksTab(
+fun StreaksCalendarTab(
     streakDays: Int,
     restDaysUsed: Int,
     onDonateClick: () -> Unit,
@@ -606,7 +618,7 @@ fun StreaksTab(
                         painter = painterResource(id = R.drawable.mascot_relaxing),
                         contentDescription = "Rest Day Mascot",
                         modifier = Modifier
-                            .size(72.dp)
+                            .size(68.dp)
                             .clip(RoundedCornerShape(16.dp)),
                         contentScale = ContentScale.Crop
                     )
@@ -623,7 +635,7 @@ fun StreaksTab(
                             Text(text = "🔥", fontSize = 20.sp)
                         }
                         Text(
-                            text = "You're on fire! Keep it going.",
+                            text = "Streak Protected by Smart Rest Days",
                             color = EmeraldGreen,
                             fontSize = 12.sp,
                             fontWeight = FontWeight.SemiBold
@@ -631,11 +643,11 @@ fun StreaksTab(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(14.dp))
+                Spacer(modifier = Modifier.height(12.dp))
                 HorizontalDivider(color = SurfaceLightDark)
                 Spacer(modifier = Modifier.height(12.dp))
 
-                // Rest Day Protection Rule
+                // Rest Day Rule
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -643,13 +655,13 @@ fun StreaksTab(
                 ) {
                     Column {
                         Text(
-                            text = "Smart Rest Protection",
+                            text = "2 Rest Days Allowed / Week",
                             color = TextPrimary,
                             fontWeight = FontWeight.Bold,
                             fontSize = 13.sp
                         )
                         Text(
-                            text = "2 Rest Days allowed per week (Mon–Sun)",
+                            text = "Monday to Sunday · Guilt-free recovery",
                             color = TextSecondary,
                             fontSize = 11.sp
                         )
@@ -670,9 +682,9 @@ fun StreaksTab(
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(14.dp))
 
-        // Streak Rules Info
+        // 3-Day Inactivity Warning Card
         Surface(
             color = SurfaceDark,
             shape = RoundedCornerShape(16.dp),
@@ -686,20 +698,20 @@ fun StreaksTab(
                     painter = painterResource(id = R.drawable.mascot_sad),
                     contentDescription = "Sad Mascot",
                     modifier = Modifier
-                        .size(44.dp)
-                        .clip(RoundedCornerShape(10.dp)),
+                        .size(46.dp)
+                        .clip(RoundedCornerShape(12.dp)),
                     contentScale = ContentScale.Crop
                 )
                 Spacer(modifier = Modifier.width(12.dp))
                 Column {
                     Text(
-                        text = "3-Day Inactivity Rule",
-                        color = TextPrimary,
+                        text = "3-Day Gap Rule",
+                        color = AmberFire,
                         fontWeight = FontWeight.Bold,
                         fontSize = 12.sp
                     )
                     Text(
-                        text = "If inactive for 3 consecutive days, streak breaks into history and restarts at Day 1.",
+                        text = "If inactive for 3 consecutive days without rest credit, streak resets to Day 1.",
                         color = TextSecondary,
                         fontSize = 11.sp,
                         lineHeight = 14.sp
@@ -708,7 +720,115 @@ fun StreaksTab(
             }
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(14.dp))
+
+        // COMPLETE MONTHLY CALENDAR GRID
+        Surface(
+            color = SurfaceDark,
+            shape = RoundedCornerShape(22.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "November 2026",
+                        color = TextPrimary,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 15.sp
+                    )
+                    Text(
+                        text = "12 Active Days",
+                        color = EmeraldGreen,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 11.sp
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // Day headers (Mon - Sun)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    listOf("M", "T", "W", "T", "F", "S", "S").forEach { day ->
+                        Text(
+                            text = day,
+                            color = TextSecondary,
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+                HorizontalDivider(color = SurfaceLightDark)
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // 4 Weeks Calendar Rows
+                val weeks = listOf(
+                    listOf(Pair(26, false), Pair(27, false), Pair(28, false), Pair(29, false), Pair(30, false), Pair(31, false), Pair(1, true)),
+                    listOf(Pair(2, true), Pair(3, true), Pair(4, true), Pair(5, false), Pair(6, false), Pair(7, false), Pair(8, false)),
+                    listOf(Pair(9, false), Pair(10, false), Pair(11, false), Pair(12, false), Pair(13, false), Pair(14, false), Pair(15, false)),
+                    listOf(Pair(16, false), Pair(17, false), Pair(18, false), Pair(19, false), Pair(20, false), Pair(21, false), Pair(22, false)),
+                    listOf(Pair(23, false), Pair(24, false), Pair(25, false), Pair(26, false), Pair(27, false), Pair(28, false), Pair(29, false))
+                )
+
+                weeks.forEach { week ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 3.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        week.forEach { (dayNum, isCompleted) ->
+                            val isToday = (dayNum == 3)
+                            val isRestDay = (dayNum == 4)
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .size(34.dp)
+                                    .clip(CircleShape)
+                                    .background(
+                                        when {
+                                            isToday -> EmeraldGreen
+                                            isRestDay -> OceanBlue.copy(alpha = 0.2f)
+                                            isCompleted -> EmeraldGreen.copy(alpha = 0.2f)
+                                            else -> Color.Transparent
+                                        }
+                                    )
+                                    .border(
+                                        width = if (isToday) 2.dp else 0.dp,
+                                        color = if (isToday) EmeraldLight else Color.Transparent,
+                                        shape = CircleShape
+                                    )
+                            ) {
+                                Text(
+                                    text = dayNum.toString(),
+                                    color = when {
+                                        isToday -> BackgroundDark
+                                        isCompleted -> EmeraldGreen
+                                        isRestDay -> OceanBlue
+                                        else -> TextSecondary
+                                    },
+                                    fontSize = 11.sp,
+                                    fontWeight = if (isToday || isCompleted) FontWeight.Bold else FontWeight.Normal
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         UniversalDonateRow(onClick = onDonateClick)
         Spacer(modifier = Modifier.height(10.dp))
@@ -721,7 +841,7 @@ fun StreaksTab(
    ===================================================================== */
 
 @Composable
-fun IndianDietTab(
+fun IndianThaliDietTab(
     onDonateClick: () -> Unit,
     onInstagramClick: () -> Unit
 ) {
@@ -772,7 +892,7 @@ fun IndianDietTab(
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(14.dp))
 
         // Mascot Gym Banner
         Surface(
@@ -795,13 +915,13 @@ fun IndianDietTab(
                 Spacer(modifier = Modifier.width(12.dp))
                 Column {
                     Text(
-                        text = "Fuel Your Movement",
+                        text = "Fuel Your Health & Steps",
                         color = TextPrimary,
                         fontWeight = FontWeight.Bold,
                         fontSize = 14.sp
                     )
                     Text(
-                        text = "Balanced Indian macros: Daal for protein, Roti/Rice for clean carbs, Salad for fiber.",
+                        text = "Balanced Indian macros: Daal for protein, Roti/Rice for energy, Salad for fiber.",
                         color = TextSecondary,
                         fontSize = 11.sp,
                         lineHeight = 14.sp
@@ -810,11 +930,11 @@ fun IndianDietTab(
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(14.dp))
 
         // Visual Thali Plate Representation
         Text(
-            text = "Interactive Thali Plate",
+            text = "Interactive Thali Plate (Tap to Swap)",
             color = TextPrimary,
             fontWeight = FontWeight.Bold,
             fontSize = 15.sp,
@@ -824,21 +944,21 @@ fun IndianDietTab(
 
         val katoris = if (isVeg) {
             listOf(
-                Triple("🥣 Dal Tadka", "180 kcal", "High Protein"),
-                Triple("🍛 Rajma Masala", "240 kcal", "Fiber & Complex Carbs"),
+                Triple("🥣 Dal Tadka", "180 kcal", "High Protein Pulses"),
+                Triple("🍛 Rajma Masala", "240 kcal", "Complex Carbs & Fiber"),
                 Triple("🍚 Basmati Rice", "210 kcal", "Sustained Energy"),
                 Triple("🫓 Roti (2 pcs)", "160 kcal", "Whole Wheat"),
-                Triple("🥗 Salad & Cucumber", "35 kcal", "Hydrating Micronutrients"),
-                Triple("🥛 Fresh Curd / Dahi", "100 kcal", "Gut Health Probiotics")
+                Triple("🥛 Fresh Curd / Dahi", "100 kcal", "Probiotic Gut Health"),
+                Triple("🥗 Salad & Achar", "35 kcal", "Hydrating Fiber & Lemon Pickle")
             )
         } else {
             listOf(
-                Triple("🍗 Chicken Curry", "280 kcal", "Lean Protein"),
-                Triple("🥚 Boiled Eggs (2)", "155 kcal", "Essential Amino Acids"),
+                Triple("🍗 Chicken Curry", "280 kcal", "Lean Muscle Protein"),
+                Triple("🥚 Boiled Eggs (2)", "155 kcal", "Complete Amino Acids"),
                 Triple("🍚 Basmati Rice", "210 kcal", "Sustained Energy"),
                 Triple("🫓 Roti (2 pcs)", "160 kcal", "Whole Wheat"),
-                Triple("🥗 Salad & Greens", "35 kcal", "Vitamins & Fiber"),
-                Triple("🥛 Chhaas / Buttermilk", "60 kcal", "Refreshing & Digestive")
+                Triple("🥛 Chhaas Buttermilk", "60 kcal", "Refreshing Digestive"),
+                Triple("🥗 Salad & Greens", "35 kcal", "Vitamins & Antioxidants")
             )
         }
 
@@ -869,7 +989,7 @@ fun IndianDietTab(
             }
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         UniversalDonateRow(onClick = onDonateClick)
         Spacer(modifier = Modifier.height(10.dp))
@@ -928,7 +1048,7 @@ fun HydrationTab(
                         fontSize = 14.sp
                     )
                     Text(
-                        text = "Every walk & workout burns water. Keep your joints & metabolism happy!",
+                        text = "Target: %,d ml / day. Keeps your joints & calorie burn high!".format(waterTargetMl),
                         color = TextSecondary,
                         fontSize = 11.sp,
                         lineHeight = 14.sp
@@ -975,7 +1095,7 @@ fun HydrationTab(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // +250ml Glass Quick Log Button
+        // Action Buttons
         Button(
             onClick = onAddGlass,
             colors = ButtonDefaults.buttonColors(
@@ -992,7 +1112,7 @@ fun HydrationTab(
             Text("Log +250ml Glass of Water", fontWeight = FontWeight.Bold, fontSize = 14.sp)
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         UniversalDonateRow(onClick = onDonateClick)
         Spacer(modifier = Modifier.height(10.dp))
@@ -1001,7 +1121,7 @@ fun HydrationTab(
 }
 
 /* =====================================================================
-   TAB 4: MORE & SETTINGS (FULL DONATE SECTION - BRIEF SECTION 2c)
+   TAB 4: SETTINGS & FULL DONATE SECTION (Brief Section 2c)
    ===================================================================== */
 
 @Composable
@@ -1023,7 +1143,7 @@ fun SettingsTab(
     ) {
         Spacer(modifier = Modifier.height(12.dp))
 
-        // Profile & Goal Card
+        // Profile Card
         Surface(
             color = SurfaceDark,
             shape = RoundedCornerShape(18.dp),
@@ -1052,7 +1172,7 @@ fun SettingsTab(
             }
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(18.dp))
 
         /* -------------------------------------------------------------
            FULL DONATE SECTION (Exact specification from Brief Section 2c)
@@ -1207,7 +1327,7 @@ fun SettingsTab(
 }
 
 /* =====================================================================
-   FALLBACK BOTTOM SHEET (Brief Section 3, step 3)
+   FALLBACK SHEET (Brief Section 3, step 3)
    ===================================================================== */
 
 @OptIn(ExperimentalMaterial3Api::class)
