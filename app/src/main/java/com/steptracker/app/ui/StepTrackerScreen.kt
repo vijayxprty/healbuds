@@ -527,10 +527,7 @@ fun TodayStepsTab(
                         text = if (progress >= 1f)
                             "You crushed your daily goal! Time to celebrate!"
                         else
-                            ""%,d steps crushed! Only %,d more to hit our daily goal. Let's walk together!"".format(
-                                currentSteps,
-                                (dailyGoal - currentSteps).coerceAtLeast(0)
-                            ),
+                            "\"${String.format(Locale.getDefault(), "%,d", currentSteps)} steps crushed! Only ${String.format(Locale.getDefault(), "%,d", (dailyGoal - currentSteps).coerceAtLeast(0))} more to hit our daily goal. Let's walk together!\"",
                         color = TextSecondary,
                         fontSize = 11.sp,
                         lineHeight = 15.sp
